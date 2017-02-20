@@ -83,6 +83,7 @@ repositories {
 dependencies {
     // Dependencies for runtime
     compile "org.zeromq:zyre:0.1.1-SNAPSHOT"
+    compile "org.slf4j:slf4j-log4j12:1.7.2"
 
     // Dependencies for testing
     testCompile "junit:junit:4.12"

@@ -26,6 +26,7 @@ public class Chat extends Thread {
         if (name != null) {
             zre.setName(name);
         }
+        zre.setVerbose();
         zre.start();
         zre.join("home");
 
@@ -148,7 +149,7 @@ public class Chat extends Thread {
             String peer = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("[INFO] %s entered\n", name);
+                System.out.printf("%s entered\n", name);
             }
         }
 
@@ -156,7 +157,7 @@ public class Chat extends Thread {
             message.popString();
             String name = message.popString();
             if (name != null) {
-                System.out.printf("[INFO] %s left\n", name);
+                System.out.printf("%s left\n", name);
             }
         }
 
@@ -165,7 +166,7 @@ public class Chat extends Thread {
             String group = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("[INFO] %s joined %s\n", name, group);
+                System.out.printf("%s joined %s\n", name, group);
             }
         }
 
@@ -174,21 +175,21 @@ public class Chat extends Thread {
             String group = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("[INFO] %s left %s\n", name, group);
+                System.out.printf("%s left %s\n", name, group);
             }
         }
 
         private void onWhisper(Message message) {
             String peer = message.popString();
             String content = message.popString();
-            System.out.printf("[%s] %s\n", zre.getPeerName(peer), content);
+            System.out.printf("%s (@%s)\n", content, zre.getPeerName(peer));
         }
 
         private void onShout(Message message) {
             String peer = message.popString();
             String group = message.popString();
             String content = message.popString();
-            System.out.printf("[%s:%s] %s\n", group, zre.getPeerName(peer), content);
+            System.out.printf("[%s] %s (@%s)\n", group, content, zre.getPeerName(peer));
         }
     }
 
