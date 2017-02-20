@@ -11,6 +11,7 @@ apply plugin: "maven"
 // -----------------------------------------------------------------------------
 
 sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 // -----------------------------------------------------------------------------
 // Custom configuration names (see below for uses)
