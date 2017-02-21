@@ -3,15 +3,14 @@
 // -----------------------------------------------------------------------------
 
 apply plugin: "java"
-apply plugin: "eclipse"
 apply plugin: "maven"
 
 // -----------------------------------------------------------------------------
 // Custom properties (see gradle.properties and settings.gradle for more)
 // -----------------------------------------------------------------------------
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // -----------------------------------------------------------------------------
 // Custom configuration names (see below for uses)

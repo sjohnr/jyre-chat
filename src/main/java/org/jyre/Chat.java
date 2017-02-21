@@ -7,8 +7,12 @@ import org.zeromq.api.Message;
 import org.zeromq.api.Reactor;
 import org.zeromq.api.Socket;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Chat extends Thread {
     private String name;
@@ -26,7 +30,9 @@ public class Chat extends Thread {
         if (name != null) {
             zre.setName(name);
         }
-        zre.setVerbose();
+        if (System.getProperty("verbose", "false").equals("true")) {
+            zre.setVerbose();
+        }
         zre.start();
         zre.join("home");
 
@@ -149,7 +155,7 @@ public class Chat extends Thread {
             String peer = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("%s entered\n", name);
+                System.out.printf("%s: %s entered\n", time(), name);
             }
         }
 
@@ -157,7 +163,7 @@ public class Chat extends Thread {
             message.popString();
             String name = message.popString();
             if (name != null) {
-                System.out.printf("%s left\n", name);
+                System.out.printf("%s: %s left\n", time(), name);
             }
         }
 
@@ -166,7 +172,7 @@ public class Chat extends Thread {
             String group = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("%s joined %s\n", name, group);
+                System.out.printf("%s: %s joined %s\n", time(), name, group);
             }
         }
 
@@ -175,21 +181,21 @@ public class Chat extends Thread {
             String group = message.popString();
             String name = zre.getPeerName(peer);
             if (name != null) {
-                System.out.printf("%s left %s\n", name, group);
+                System.out.printf("%s: %s left %s\n", time(), name, group);
             }
         }
 
         private void onWhisper(Message message) {
             String peer = message.popString();
             String content = message.popString();
-            System.out.printf("%s (@%s)\n", content, zre.getPeerName(peer));
+            System.out.printf("%s: #%-12s @%-20s %s\n", time(), "private", zre.getPeerName(peer), content);
         }
 
         private void onShout(Message message) {
             String peer = message.popString();
             String group = message.popString();
             String content = message.popString();
-            System.out.printf("[%s] %s (@%s)\n", group, content, zre.getPeerName(peer));
+            System.out.printf("%s: #%-12s @%-20s %s\n", time(), group, zre.getPeerName(peer), content);
         }
     }
 
@@ -233,12 +239,18 @@ public class Chat extends Thread {
                     break;
                 }
             }
+            System.out.printf("%s: #%-12s @%-20s %s\n", time(), "private", name, content);
         }
 
         private void onShout(Message message) {
             String group = message.popString();
             String content = message.popString();
             zre.shout(new Message(group).addString(content));
+            System.out.printf("%s: #%-12s @%-20s %s\n", time(), group, name, content);
         }
+    }
+
+    private String time() {
+        return LocalTime.now().format(DateTimeFormatter.ofPattern("h:mm a")).toLowerCase();
     }
 }
