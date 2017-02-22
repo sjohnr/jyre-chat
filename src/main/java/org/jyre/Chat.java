@@ -7,10 +7,8 @@ import org.zeromq.api.Message;
 import org.zeromq.api.Reactor;
 import org.zeromq.api.Socket;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -235,7 +233,7 @@ public class Chat extends Thread {
             String content = message.popString();
             for (String identity : zre.getPeers()) {
                 if (zre.getPeerName(identity).equals(peer)) {
-                    zre.whisper(new Message(identity).addString(content));
+                    zre.whisper(identity, new Message(content));
                     break;
                 }
             }
@@ -245,7 +243,7 @@ public class Chat extends Thread {
         private void onShout(Message message) {
             String group = message.popString();
             String content = message.popString();
-            zre.shout(new Message(group).addString(content));
+            zre.shout(group, new Message(content));
             System.out.printf("%s: #%-12s @%-20s %s\n", time(), group, name, content);
         }
     }
